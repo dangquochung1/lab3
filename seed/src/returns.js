@@ -15,6 +15,13 @@ function openReturn(order, lines) {
     throw new Error('a return must cover at least one line');
   }
 
+  for (const line of lines) {
+    const ordered = order.lines.find(l => l.sku === line.sku);
+    if (!ordered) {
+      throw new Error(`sku ${line.sku} is not on order ${order.id}`);
+    }
+  }
+
   return {
     orderId: order.id,
     lines,
@@ -27,6 +34,12 @@ function openReturn(order, lines) {
 function approve(returnRequest, clerkId, reason) {
   if (!reason) {
     throw new Error('a refund approval must carry a reason');
+  }
+
+  if (line.quantity > ordered.quantity) {
+    throw new Error(
+        `cannot return ${line.quantity} of ${line.sku}; only ${ordered.quantity} were ordered`
+    );
   }
 
   return {
