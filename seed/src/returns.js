@@ -15,6 +15,15 @@ function openReturn(order, lines) {
     throw new Error('a return must cover at least one line');
   }
 
+  const eligibleLines = lines.filter(line => {
+    const orderLine = order.lines ? order.lines.find(l => l.sku === line.sku) : null;
+    return !(line.finalClearance || (orderLine && orderLine.finalClearance));
+  });
+
+  if (eligibleLines.length === 0) {
+    throw new Error('cannot return final clearance items');
+  }
+
   for (const line of lines) {
     const ordered = order.lines.find(l => l.sku === line.sku);
 
