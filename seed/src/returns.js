@@ -36,6 +36,12 @@ function approve(returnRequest, clerkId, reason) {
     throw new Error('a refund approval must carry a reason');
   }
 
+  if (line.quantity > ordered.quantity) {
+    throw new Error(
+        `cannot return ${line.quantity} of ${line.sku}; only ${ordered.quantity} were ordered`
+    );
+  }
+
   return {
     ...returnRequest,
     approvedBy: clerkId,
