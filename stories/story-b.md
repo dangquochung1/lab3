@@ -6,6 +6,7 @@
 > I want returns opened more than 30 days after delivery to be refused
 > So that the policy is enforced when the return is raised, not after I have already promised
 > the customer a refund
+> hello 1
 
 ## Acceptance criteria
 
@@ -16,6 +17,7 @@
   not started.
 - The refusal is a thrown error, consistent with how `openReturn` already rejects an empty
   line list.
+- Hello 2
 
 ## Notes
 
@@ -24,3 +26,5 @@ the website says "one month", which is a separate problem and not yours to fix h
 
 Your change belongs in `openReturn` in `src/returns.js`. Branch from `main` as
 `feature/odk-152-return-window`.
+
+Hello 3
