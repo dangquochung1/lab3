@@ -20,6 +20,10 @@ function openReturn(order, lines) {
     return !(line.finalClearance || (orderLine && orderLine.finalClearance));
   });
 
+  if (eligibleLines.length === 0) {
+    throw new Error('cannot return final clearance items');
+  }
+
   return {
     orderId: order.id,
     lines,
