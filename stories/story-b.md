@@ -6,6 +6,7 @@
 > I want returns opened more than 30 days after delivery to be refused
 > So that the policy is enforced when the return is raised, not after I have already promised
 > the customer a refund
+> hello 1
 
 ## Acceptance criteria
 
