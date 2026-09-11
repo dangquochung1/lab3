@@ -17,6 +17,7 @@
   not started.
 - The refusal is a thrown error, consistent with how `openReturn` already rejects an empty
   line list.
+- Hello 2
 
 ## Notes
 
