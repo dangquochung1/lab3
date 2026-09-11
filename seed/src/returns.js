@@ -20,6 +20,35 @@ function openReturn(order, lines) {
     throw new Error('cannot open a return for a cancelled order');
   }
 
+  const eligibleLines = lines.filter(line => {
+    const orderLine = order.lines ? order.lines.find(l => l.sku === line.sku) : null;
+    return !(line.finalClearance || (orderLine && orderLine.finalClearance));
+  });
+
+  if (eligibleLines.length === 0) {
+    throw new Error('cannot return final clearance items');
+  }
+
+  for (const line of lines) {
+    const ordered = order.lines.find(l => l.sku === line.sku);
+
+    if (!ordered) {
+      throw new Error(`sku ${line.sku} is not on order ${order.id}`);
+    }
+  }
+
+  if (order.deliveredAt) {
+    const deliveredAt = new Date(order.deliveredAt);
+    const now = new Date();
+
+    const daysSinceDelivery =
+      (now - deliveredAt) / (1000 * 60 * 60 * 24);
+
+    if (daysSinceDelivery > 30) {
+      throw new Error('return window has expired: returns must be opened within 30 days of delivery');
+    }
+  }
+
   return {
     orderId: order.id,
     lines,
@@ -35,6 +64,12 @@ function approve(returnRequest, clerkId, reason) {
     throw new Error('a refund approval must carry a reason');
   }
 
+  if (line.quantity > ordered.quantity) {
+    throw new Error(
+        `cannot return ${line.quantity} of ${line.sku}; only ${ordered.quantity} were ordered`
+    );
+  }
+
   return {
     ...returnRequest,
     approvedBy: clerkId,
@@ -44,3 +79,5 @@ function approve(returnRequest, clerkId, reason) {
 }
 
 module.exports = { openReturn, approve };
+
+
