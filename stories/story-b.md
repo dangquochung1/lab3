@@ -28,5 +28,3 @@ Your change belongs in `openReturn` in `src/returns.js`. Branch from `main` as
 `feature/odk-152-return-window`.
 
 Hello 3
-
-Hello 4

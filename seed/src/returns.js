@@ -17,8 +17,21 @@ function openReturn(order, lines) {
 
   for (const line of lines) {
     const ordered = order.lines.find(l => l.sku === line.sku);
+
     if (!ordered) {
       throw new Error(`sku ${line.sku} is not on order ${order.id}`);
+    }
+  }
+
+  if (order.deliveredAt) {
+    const deliveredAt = new Date(order.deliveredAt);
+    const now = new Date();
+
+    const daysSinceDelivery =
+      (now - deliveredAt) / (1000 * 60 * 60 * 24);
+
+    if (daysSinceDelivery > 30) {
+      throw new Error('return window has expired: returns must be opened within 30 days of delivery');
     }
   }
 
@@ -51,3 +64,5 @@ function approve(returnRequest, clerkId, reason) {
 }
 
 module.exports = { openReturn, approve };
+
+
