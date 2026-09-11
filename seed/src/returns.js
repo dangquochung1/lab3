@@ -15,6 +15,11 @@ function openReturn(order, lines) {
     throw new Error('a return must cover at least one line');
   }
 
+  // Guard của Story D: Từ chối đơn hàng đã bị hủy
+  if (order.status === 'cancelled') {
+    throw new Error('cannot open a return for a cancelled order');
+  }
+
   return {
     orderId: order.id,
     lines,
@@ -23,6 +28,7 @@ function openReturn(order, lines) {
     approvedAt: null,
   };
 }
+
 
 function approve(returnRequest, clerkId, reason) {
   if (!reason) {
