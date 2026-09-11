@@ -15,6 +15,11 @@ function openReturn(order, lines) {
     throw new Error('a return must cover at least one line');
   }
 
+  const eligibleLines = lines.filter(line => {
+    const orderLine = order.lines ? order.lines.find(l => l.sku === line.sku) : null;
+    return !(line.finalClearance || (orderLine && orderLine.finalClearance));
+  });
+
   return {
     orderId: order.id,
     lines,
